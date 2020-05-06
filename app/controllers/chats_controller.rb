@@ -4,7 +4,7 @@ class ChatsController < ApplicationController
   # GET /chats
   # GET /chats.json
   def index
-    @chats = Chat.all
+    @chats = Chat.order(id: :desc).limit(10)
   end
 
   # GET /chats/1
@@ -15,7 +15,7 @@ class ChatsController < ApplicationController
   # GET /chats/new
   def new
     @chat = Chat.new
-    @chats =Chat.all
+    @chats = Chat.order(id: :desc).limit(10)
   end
 
   # GET /chats/1/edit
@@ -29,7 +29,6 @@ class ChatsController < ApplicationController
 
     respond_to do |format|
       if @chat.save
-        ActionCable.server.broadcast 'room_channel', content: @chat
         format.html { redirect_to @chat, notice: 'Chat was successfully created.' }
         format.json { render :show, status: :created, location: @chat }
         format.js
