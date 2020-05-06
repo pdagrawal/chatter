@@ -29,8 +29,9 @@ class ChatsController < ApplicationController
 
     respond_to do |format|
       if @chat.save
-        # format.html { redirect_to @chat, notice: 'Chat was successfully created.' }
-        # format.json { render :show, status: :created, location: @chat }
+        ActionCable.server.broadcast 'room_channel', content: @chat
+        format.html { redirect_to @chat, notice: 'Chat was successfully created.' }
+        format.json { render :show, status: :created, location: @chat }
         format.js
       else
         format.html { render :new }
